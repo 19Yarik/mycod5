@@ -1,0 +1,37 @@
+from collections import deque
+
+class MyStack:
+    def __init__(self):
+        self.queue1 = deque()  # Перша черга для зберігання елементів
+        self.queue2 = deque()  # Друга черга для допомоги в реалізації стека
+
+    def push(self, x: int) -> None:
+        # Додаємо новий елемент у queue2
+        self.queue2.append(x)
+        
+        # Переносимо всі елементи з queue1 до queue2
+        while self.queue1:
+            self.queue2.append(self.queue1.popleft())
+        
+        # Перемінюємо назви черг
+        self.queue1, self.queue2 = self.queue2, self.queue1
+
+    def pop(self) -> int:
+        # Видаляємо і повертаємо елемент з вершини стека
+        return self.queue1.popleft()
+
+    def top(self) -> int:
+        # Повертаємо елемент з вершини стека без його видалення
+        return self.queue1[0]
+
+    def empty(self) -> bool:
+        # Перевіряємо, чи порожній стек
+        return not self.queue1
+
+# Приклад використання
+myStack = MyStack()
+myStack.push(1)
+myStack.push(2)
+print(myStack.top())    # Виведе: 2
+print(myStack.pop())     # Виведе: 2
+print(myStack.empty())   # Виведе: False
