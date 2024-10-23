@@ -1,0 +1,21 @@
+class RecentCounter:
+    def __init__(self):
+        self.requests = []  # Список для зберігання часів запитів
+
+    def ping(self, t: int) -> int:
+        # Додаємо новий запит
+        self.requests.append(t)
+        
+        # Видаляємо запити, які поза межами 3000 мс
+        while self.requests and self.requests[0] < t - 3000:
+            self.requests.pop(0)
+
+        # Повертаємо кількість запитів у вказаному діапазоні
+        return len(self.requests)
+
+# Приклад використання
+recentCounter = RecentCounter()
+print(recentCounter.ping(1))      # Виведе: 1
+print(recentCounter.ping(100))     # Виведе: 2
+print(recentCounter.ping(3001))    # Виведе: 3
+print(recentCounter.ping(3002))    # Виведе: 3
