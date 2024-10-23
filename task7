@@ -1,0 +1,37 @@
+from collections import deque
+
+def maxSubsequenceSum(nums, k):
+    n = len(nums)
+    dp = [0] * n
+    max_sum = float('-inf')
+
+    # Дек для зберігання максимальних значень
+    dq = deque()
+
+    for i in range(n):
+        # Встановлюємо dp[i] як значення nums[i]
+        dp[i] = nums[i]
+        
+        # Додаємо максимальну суму з деку, якщо дек не порожній
+        if dq:
+            dp[i] += dq[0]
+
+        # Оновлюємо максимальну суму
+        max_sum = max(max_sum, dp[i])
+
+        # Додаємо dp[i] до деку
+        while dq and dq[-1] < dp[i]:
+            dq.pop()
+        dq.append(dp[i])
+
+        # Видаляємо елементи, які більше не можуть бути використані
+        if i >= k:
+            if dq[0] == dp[i - k]:
+                dq.popleft()
+
+    return max_sum
+
+# Приклади використання
+print(maxSubsequenceSum([10, 2, -10, 5, 20], 2))  # Виведе: 37
+print(maxSubsequenceSum([-1, -2, -3], 1))           # Виведе: -1
+print(maxSubsequenceSum([10, -2, -10, -5, 20], 2))  # Виведе: 23
