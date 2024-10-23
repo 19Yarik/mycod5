@@ -1,0 +1,23 @@
+def first_unique_character(s: str) -> int:
+    # Створюємо словник для підрахунку частоти символів
+    char_count = {}
+    
+    # Проходимо по рядку і підраховуємо частоту кожного символу
+    for char in s:
+        if char in char_count:
+            char_count[char] += 1
+        else:
+            char_count[char] = 1
+            
+    # Знову проходимо по рядку, щоб знайти перший унікальний символ
+    for index, char in enumerate(s):
+        if char_count[char] == 1:
+            return index
+            
+    # Якщо унікальних символів немає, повертаємо -1
+    return -1
+
+# Приклади
+print(first_unique_character("leopard"))      # Виведе: 0
+print(first_unique_character("loveleopard"))  # Виведе: 2
+print(first_unique_character("aabb"))         # Виведе: -1
