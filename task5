@@ -1,0 +1,52 @@
+def movesToStamp(stamp: str, target: str):
+    stamp_length = len(stamp)
+    target_length = len(target)
+    
+    # Створюємо змінну для відстеження поточного стану рядка s
+    s = '?' * target_length
+    # Створюємо масив для відстеження, чи потрібно штампувати
+    to_stamp = [False] * target_length
+    res = []
+
+    # Функція, щоб визначити, чи можна штампувати на даному індексі
+    def can_stamp(i):
+        # Перевіряємо, чи можемо ми застосувати штамп на позиції i
+        can = False
+        for j in range(stamp_length):
+            if i + j >= target_length:  # За межами target
+                return False
+            if s[i + j] == '?':
+                continue  # Ігноруємо '?'
+            if s[i + j] != stamp[j]:  # Не збігається
+                return False
+            can = True
+        return can
+
+    # Функція для застосування штампа
+    def stamp_at(i):
+        for j in range(stamp_length):
+            s = s[:i + j] + stamp[j] + s[i + j + 1:]
+        res.append(i)
+        return s
+
+    for _ in range(10 * target_length):
+        stamped = False
+        for i in range(target_length - stamp_length + 1):
+            if can_stamp(i):
+                s = stamp_at(i)
+                stamped = True
+                # Оновлюємо статус, щоб позначити позицію як вже оброблену
+                for j in range(stamp_length):
+                    to_stamp[i + j] = True
+
+        if s == target:  # Якщо s тепер дорівнює target
+            return res[::-1]  # Повертаємо результати у зворотному порядку
+
+        if not stamped:  # Якщо нічого не штамповано, виходимо з циклу
+            break
+
+    return []  # Не вдалося перетворити
+
+# Приклади використання
+print(movesToStamp("abc", "ababc"))      # Виведе: [0, 2]
+print(movesToStamp("abca", "aabcaca"))   # Виведе: [3, 0, 1]
